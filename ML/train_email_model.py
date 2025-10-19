@@ -5,6 +5,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 import pickle
 # data = pd.read_csv("https://raw.githubusercontent.com/dD2405/Twitter_Sentiment_Analysis/master/train.csv")
+# Kaggle data added..
 data = pd.read_csv("spam_ham_dataset.csv")
 data = data.rename(columns={"tweet": "text", "label": "label"})
 data = data.sample(5000, random_state=42)
