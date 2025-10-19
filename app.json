@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "SafeMailAI",
+    "scheme": "safemailai",
     "slug": "safemailai",
     "version": "1.0.0",
     "orientation": "portrait",
