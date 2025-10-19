@@ -76,7 +76,7 @@ app.get(
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
     const email = req.user.emails[0].value;
-    res.redirect(`http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`);
+    res.redirect(`safemailai://InboxScreen?email=${encodeURIComponent(email)}`);
   }
 );
 

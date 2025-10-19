@@ -31,12 +31,16 @@ const BACKEND_URL = "https://safemail-ai-mobile.onrender.com";
       setLoading(true);
 
       if (provider === "gmail") {
+//         const result = await WebBrowser.openAuthSessionAsync(
+//   "https://safemail-ai-mobile.onrender.com/auth/google", 
+//     "https://safemail-ai-mobile.onrender.com/" , 
+//   Linking.createURL("/Inbox")         
+// );
         const result = await WebBrowser.openAuthSessionAsync(
-  "https://safemail-ai-mobile.onrender.com/auth/google", 
-    "https://safemail-ai-mobile.onrender.com/" , 
-  Linking.createURL("/Inbox")         
-);
-
+      "https://safemail-ai-mobile.onrender.com/auth/google", 
+      "safemailai://",
+      Linking.createURL("/Inbox") 
+    );
         console.log("OAuth result:", result);
       }
 
