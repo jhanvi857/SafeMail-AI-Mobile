@@ -252,7 +252,14 @@ export default function InboxScreen() {
   useEffect(() => {
   const handleDeepLink = ({ url }) => {
     const { queryParams } = Linking.parse(url);
+
+    // existing handling
     if (queryParams.email) setEmail(queryParams.email);
+
+    // new handling for Expo OAuth redirect
+    if (queryParams.safemailDeepLink) {
+      Linking.openURL(queryParams.safemailDeepLink);
+    }
   };
 
   Linking.getInitialURL().then((url) => {
