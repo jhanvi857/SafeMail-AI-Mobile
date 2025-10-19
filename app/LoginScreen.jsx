@@ -36,7 +36,11 @@ const BACKEND_URL = "https://safemail-ai-mobile.onrender.com";
     "https://safemail-ai-mobile.onrender.com/" , 
   Linking.createURL("/Inbox")         
 );
-
+    //     const result = await WebBrowser.openAuthSessionAsync(
+    //   "https://safemail-ai-mobile.onrender.com/auth/google", // your deployed backend
+    //   "safemailai://",
+    //   Linking.createURL("/Inbox") // your explicit deep link scheme
+    // );
         console.log("OAuth result:", result);
       }
 

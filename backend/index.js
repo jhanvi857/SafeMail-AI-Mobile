@@ -11,7 +11,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: [`http://localhost:8081/LoginScreen`], 
+    origin: [`http://localhost:8081/LoginScreen`,"exp://192.168.1.3:19000"], 
     credentials: true,
   })
 );
@@ -38,7 +38,8 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.BASE_URL}/auth/google/callback`,
+      // callbackURL: `${process.env.BASE_URL}/auth/google/callback`,
+      callbackURL: `https://auth.expo.io/@jhanvi_patel/safemailai`,
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
@@ -76,7 +77,8 @@ app.get(
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
     const email = req.user.emails[0].value;
-    res.redirect(`http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`);
+    // res.redirect(`http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`);
+    res.redirect(`safemailai://InboxScreen?email=${encodeURIComponent(email)}`);
   }
 );
 
