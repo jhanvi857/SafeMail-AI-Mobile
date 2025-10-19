@@ -16,9 +16,9 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
-app.use("/auth", oauthRouter);
+app.use("/", oauthRouter);
 app.use("/api", emailRouter);
 
-app.get("/", (req, res) => res.send("SafeMail Backend Running"));
+// app.get("/", (req, res) => res.send("SafeMail Backend Running"));
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
