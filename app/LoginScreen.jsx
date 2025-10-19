@@ -15,8 +15,8 @@ export default function LoginScreen({ onLogin }) {
     const handleDeepLink = ({ url }) => {
       const { queryParams } = Linking.parse(url);
       if (queryParams.email) {
-        console.log("✅ Logged in user:", queryParams.email);
-        onLogin(); // mark as logged in
+        console.log("Logged in user:", queryParams.email);
+        onLogin(); 
         router.push("/InboxScreen");
       }
     };
@@ -24,7 +24,7 @@ export default function LoginScreen({ onLogin }) {
     const subscription = Linking.addEventListener("url", handleDeepLink);
     return () => subscription.remove();
   }, []);
-const BACKEND_URL = "http://localhost:3000"; // must be localhost
+const BACKEND_URL = "https://safemail-ai-mobile.onrender.com"; 
 
   const handleOAuthLogin = async (provider) => {
     try {
@@ -32,8 +32,8 @@ const BACKEND_URL = "http://localhost:3000"; // must be localhost
 
       if (provider === "gmail") {
         const result = await WebBrowser.openAuthSessionAsync(
-  "http://localhost:3000/auth/google", 
-    "http://localhost:3000/" , 
+  "https://safemail-ai-mobile.onrender.com/auth/google", 
+    "https://safemail-ai-mobile.onrender.com/" , 
   Linking.createURL("/Inbox")         
 );
 
@@ -105,7 +105,7 @@ const BACKEND_URL = "http://localhost:3000"; // must be localhost
           <Mail size={20} color="#ffffff" style={{ marginRight: 12 }} />
           <Text style={{ fontSize: 16, fontWeight: "500", color: "#ffffff" }}>Login with Gmail</Text>
         </TouchableOpacity>
-          <TouchableOpacity
+          {/* <TouchableOpacity
             onPress={() => handleOAuthLogin("outlook")}
             disabled={loading}
             style={{
@@ -124,14 +124,12 @@ const BACKEND_URL = "http://localhost:3000"; // must be localhost
             <Text style={{ fontSize: 16, fontWeight: "500", color: "#ffffff" }}>Login with Outlook</Text>
           </TouchableOpacity>
 
-          {/* Divider */}
           <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 24 }}>
             <View style={{ flex: 1, height: 1, backgroundColor: "#334155" }} />
             <Text style={{ marginHorizontal: 12, color: "#9ca3af", fontSize: 12 }}>or</Text>
             <View style={{ flex: 1, height: 1, backgroundColor: "#334155" }} />
           </View>
 
-          {/* Manual Upload */}
           <TouchableOpacity
             style={{
               borderWidth: 2,
@@ -146,7 +144,7 @@ const BACKEND_URL = "http://localhost:3000"; // must be localhost
             <Mail size={32} color="#6b7280" style={{ marginBottom: 8 }} />
             <Text style={{ fontSize: 14, fontWeight: "500", color: "#ffffff", marginBottom: 4 }}>Upload EML File</Text>
             <Text style={{ fontSize: 12, color: "#9ca3af" }}>Tap to select</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           {/* Loading State */}
           {loading && (

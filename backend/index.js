@@ -4,6 +4,7 @@ const session = require("express-session");
 const { Strategy } = require("passport-google-oauth20");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const PORT = process.env.PORT || 3000;
 
 dotenv.config();
 const app = express();
@@ -22,7 +23,7 @@ app.use(
     secret: "safemail_secret_key",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // 1 day
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }, 
   })
 );
 
@@ -70,7 +71,6 @@ app.get(
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
-// Callback route (do NOT include scope here)
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
