@@ -1,108 +1,17 @@
-// const express = require("express");
-// const passport = require("passport");
-// const session = require("express-session");
-// const { Strategy } = require("passport-google-oauth20");
-// const cors = require("cors");
-// const dotenv = require("dotenv");
-
-// dotenv.config();
-// const PORT = process.env.PORT || 3000;
-// // const app = express();
-// const router = express.Router();
-// // router.use(
-// //   cors({
-// //     origin: [
-// //       "http://localhost:8081", 
-// //       "exp://192.168.1.3:19000" 
-// //     ],
-// //     credentials: true,
-// //   })
-// // );
-
-// router.use(express.json());
-// router.use(
-//   session({
-//     secret: "safemail_secret_key",
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: { maxAge: 24 * 60 * 60 * 1000 },
-//   })
-// );
-
-// router.use(passport.initialize());
-// router.use(passport.session());
-
-// passport.serializeUser((user, done) => done(null, user));
-// passport.deserializeUser((user, done) => done(null, user));
-
-// passport.use(
-//   new Strategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: `${process.env.BASE_URL}/auth/google/callback`, 
-//     },
-//     (accessToken, refreshToken, profile, done) => done(null, profile)
-//   )
-// );
-
-// router.get("/", (req, res) => res.send("SafeMail Backend Running"));
-
-// router.get(
-//   "/auth/google",
-//   passport.authenticate("google", { scope: ["email", "profile"] })
-// );
-
-// // router.get(
-// //   "/auth/google/callback",
-// //   passport.authenticate("google", { failureRedirect: "/" }),
-// //   (req, res) => {
-// //     const email = req.user.emails[0].value;
-
-// //     // Detect mobile via query param (add ?platform=mobile when opening Google auth in mobile)
-// //     const isMobile = req.query.platform === "mobile";
-
-// //     if (isMobile) {
-// //       // Expo mobile redirect with deep link
-// //       const redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemail-ai?safemailDeepLink=safemail-ai://InboxScreen?email=${encodeURIComponent(email)}`;
-// //       return res.redirect(redirectUrl);
-// //     } else {
-// //       // Web redirect (localhost dev or deployed)
-// //       const redirectUrl = `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`;
-// //       return res.redirect(redirectUrl);
-// //     }
-// //   }
-// // );
-// router.get(
-//   "/auth/google/callback",
-//   passport.authenticate("google", { failureRedirect: "/" }),
-//   (req, res) => {
-//     const email = req.user.emails[0].value;
-
-//     const isWeb = req.headers.origin && req.headers.origin.includes("localhost");
-//     const redirectUrl = isWeb
-//       ? `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`
-//       : `safemail-ai://InboxScreen?email=${encodeURIComponent(email)}`;
-
-//     res.redirect(redirectUrl);
-//   }
-// );
-
-// router.get("/api/user", (req, res) => {
-//   if (req.isAuthenticated()) res.json(req.user);
-//   else res.status(401).json({ message: "Not authenticated" });
-// });
-
-// module.exports = router;
-// oauthRouter.js
 const express = require("express");
 const passport = require("passport");
 const session = require("express-session");
 const { Strategy } = require("passport-google-oauth20");
 const dotenv = require("dotenv");
-
 dotenv.config();
+
+// Decide URL..
 const router = express.Router();
+const isProd = process.env.NODE_ENV === "production";
+const LOCALHOST_WEB = "http://localhost:8081"; 
+const MOBILE_DEEP_LINK = "safemail-ai://InboxScreen"; 
+const BACKEND_BASE = isProd ? process.env.BASE_URL : "http://localhost:3000";
+
 
 router.use(
   session({
@@ -111,12 +20,11 @@ router.use(
     saveUninitialized: true,
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
-      sameSite: "none",
-      secure: true,
+      sameSite: isProd ? "none" : "lax",
+      secure: isProd,
     },
   })
 );
-
 
 router.use(passport.initialize());
 router.use(passport.session());
@@ -129,60 +37,48 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.BASE_URL}/auth/google/callback`, 
+      callbackURL: `${BACKEND_BASE}/auth/google/callback`,
     },
-    (accessToken, refreshToken, profile, done) => done(null, profile)
+    (accessToken, refreshToken, profile, done) => {
+      profile.tokens = { accessToken, refreshToken };
+      done(null, profile);
+    }
   )
 );
 
 router.get("/", (req, res) => res.send("SafeMail OAuth running"));
 
+// gmail verification
 router.get(
   "/auth/google",
   (req, res, next) => {
-    req.session.platform = req.query.platform || "web";
-    next(); 
+    req.session.platform = req.query.platform || "web"; 
+    next();
   },
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  passport.authenticate("google", {
+    scope: [
+      "email",
+      "profile",
+      "https://www.googleapis.com/auth/gmail.readonly", 
+    ],
+    accessType: "offline", 
+    prompt: "consent", 
+  })
 );
 
-// router.get(
-//   "/auth/google/callback",
-//   passport.authenticate("google", { failureRedirect: "/" }),
-//   (req, res) => {
-//     const email = req.user.emails[0].value;
-//     const platform = req.session.platform || "web";
-
-//     let redirectUrl;
-//     if (platform === "mobile") {
-//       redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemail-ai?safemailDeepLink=safemail-ai://InboxScreen?email=${encodeURIComponent(email)}`;
-//     } else {
-//       redirectUrl = `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`;
-//     }
-
-//     res.redirect(redirectUrl);
-//   }
-// );
+// gmail callback..
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
     const email = req.user.emails[0].value;
-
-    const platform =
-      req.session?.platform ||
-      (req.headers.origin && req.headers.origin.includes("localhost")
-        ? "web"
-        : "mobile");
+    const platform = req.session.platform || "web";
 
     let redirectUrl;
-
     if (platform === "mobile") {
-      redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemail-ai?safemailDeepLink=safemail-ai://InboxScreen?email=${encodeURIComponent(
-        email
-      )}`;
+      redirectUrl = `${MOBILE_DEEP_LINK}?email=${encodeURIComponent(email)}`;
     } else {
-      redirectUrl = `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`;
+      redirectUrl = `${LOCALHOST_WEB}/InboxScreen?email=${encodeURIComponent(email)}`;
     }
 
     console.log("Redirecting user to:", redirectUrl);
@@ -190,9 +86,17 @@ router.get(
   }
 );
 
+// Demo route..
 router.get("/api/user", (req, res) => {
   if (req.isAuthenticated()) res.json(req.user);
   else res.status(401).json({ message: "Not authenticated" });
+});
+
+// Logout route..
+router.get("/auth/logout", (req, res) => {
+  req.logout(() => {
+    res.json({ message: "Logged out" });
+  });
 });
 
 module.exports = router;
