@@ -2,7 +2,7 @@
   "expo": {
     "name": "SafeMailAI",
     "scheme": "safemailai",
-    "slug": "safemailai",
+    "slug": "safemail-ai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "464c6286-02ef-4cfb-9ad9-cab63c4aa53a"
+      }
     },
     "plugins": [
       [

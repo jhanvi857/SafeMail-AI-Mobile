@@ -64,7 +64,7 @@
 
 // //     if (isMobile) {
 // //       // Expo mobile redirect with deep link
-// //       const redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemailai?safemailDeepLink=safemailai://InboxScreen?email=${encodeURIComponent(email)}`;
+// //       const redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemail-ai?safemailDeepLink=safemail-ai://InboxScreen?email=${encodeURIComponent(email)}`;
 // //       return res.redirect(redirectUrl);
 // //     } else {
 // //       // Web redirect (localhost dev or deployed)
@@ -82,7 +82,7 @@
 //     const isWeb = req.headers.origin && req.headers.origin.includes("localhost");
 //     const redirectUrl = isWeb
 //       ? `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`
-//       : `safemailai://InboxScreen?email=${encodeURIComponent(email)}`;
+//       : `safemail-ai://InboxScreen?email=${encodeURIComponent(email)}`;
 
 //     res.redirect(redirectUrl);
 //   }
@@ -155,7 +155,7 @@ router.get(
 
 //     let redirectUrl;
 //     if (platform === "mobile") {
-//       redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemailai?safemailDeepLink=safemailai://InboxScreen?email=${encodeURIComponent(email)}`;
+//       redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemail-ai?safemailDeepLink=safemail-ai://InboxScreen?email=${encodeURIComponent(email)}`;
 //     } else {
 //       redirectUrl = `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`;
 //     }
@@ -169,7 +169,6 @@ router.get(
   (req, res) => {
     const email = req.user.emails[0].value;
 
-    // Check stored platform flag from session (if lost, assume mobile if no Origin)
     const platform =
       req.session?.platform ||
       (req.headers.origin && req.headers.origin.includes("localhost")
@@ -179,12 +178,10 @@ router.get(
     let redirectUrl;
 
     if (platform === "mobile") {
-      // ✅ Correct Expo redirect for mobile deep link
-      redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemailai?safemailDeepLink=safemailai://InboxScreen?email=${encodeURIComponent(
+      redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemail-ai?safemailDeepLink=safemail-ai://InboxScreen?email=${encodeURIComponent(
         email
       )}`;
     } else {
-      // ✅ Web redirect for local dev or hosted web app
       redirectUrl = `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`;
     }
 
