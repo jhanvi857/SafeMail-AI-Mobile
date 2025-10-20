@@ -1,50 +1,68 @@
-# Welcome to your Expo app 👋
+# SafeMail-AI 🛡
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Secure AI-powered email protection system that connects to Gmail, scans messages for fraud or phishing attempts, and alerts users instantly.  
+Built with **Node.js + Flask + Expo (React Native)**.
 
-## Get started
+---
 
-1. Install dependencies
+## What It Does  🚀 
+1. Secure Google OAuth login  
+2. Fetches unread inbox emails  
+3. Classifies them as **Safe / Fraudulent** using a trained ML model  
+4. Sends notifications for suspicious messages  
+5. Lets users **paste & test custom email text** for live predictions  
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+## Key Features ✨
+- Secure Google OAuth2 login  
+- Read-only Gmail fetch (no email deletion)  
+- ML model trained on phishing datasets (TF-IDF + classifier)  
+- Notifications for flagged or risky emails  
+- Manual email text analyzer for instant results  
+- Clean, modern Expo + React Native UI  
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## Tech Stack 🏗️ 
+| Layer | Tech |
+|-------|------|
+| **Frontend** | React Native, React Router |
+| **Backend** | Node.js, Express.js, Passport (Google OAuth2) |
+| **ML Service** | Flask, scikit-learn, TF-IDF vectorizer |
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Local Setup ⚙️ 
 
-## Get a fresh project
-
-When you're ready, run:
-
+### 1. Clone repo
 ```bash
-npm run reset-project
+git clone https://github.com/jhanvi857/SafeMail-AI-Mobile.git
+cd SafeMail-AI
 ```
+### 2. Start the ML Service
+```bash
+cd ml-service
+pip install -r requirements.txt
+python app.py
+```
+### 3. Start the Backend
+```bash
+cd ../backend
+npm install
+node app.js
+```
+### 4. Start the Frontend
+```bash
+cd ../frontend
+npm install
+npm run web
+```
+### 5. Scan the QR code with Expo Go (for mobile) or open in web preview.
+---
+# Security & Privacy 🔐
+- Uses read-only Gmail scope (gmail.readonly). never deletes or modifies emails
+- Tokens stored securely
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+# 🔥 “Not just an app - your AI bodyguard for the inbox.”
