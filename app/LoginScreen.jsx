@@ -26,31 +26,51 @@ export default function LoginScreen({ onLogin }) {
   }, []);
 const BACKEND_URL = "https://safemail-ai-mobile.onrender.com"; 
 
-  const handleOAuthLogin = async (provider) => {
-    try {
-      setLoading(true);
+//   const handleOAuthLogin = async (provider) => {
+//     try {
+//       setLoading(true);
 
-      if (provider === "gmail") {
-        const result = await WebBrowser.openAuthSessionAsync(
-  "https://safemail-ai-mobile.onrender.com/auth/google", 
-    "https://safemail-ai-mobile.onrender.com/" , 
-  Linking.createURL("/Inbox")         
-);
-    //     const result = await WebBrowser.openAuthSessionAsync(
-    //   "https://safemail-ai-mobile.onrender.com/auth/google", // your deployed backend
-    //   "safemailai://",
-    //   Linking.createURL("/Inbox") // your explicit deep link scheme
-    // );
-        console.log("OAuth result:", result);
-      }
+//       if (provider === "gmail") {
+//         const result = await WebBrowser.openAuthSessionAsync(
+//   "https://safemail-ai-mobile.onrender.com/auth/google", 
+//     "https://safemail-ai-mobile.onrender.com/" , 
+//     "http://192.168.1.3:3000/auth/google?platform=mobile",
+//   Linking.createURL("/Inbox")         
+// );
+//     //     const result = await WebBrowser.openAuthSessionAsync(
+//     //   "https://safemail-ai-mobile.onrender.com/auth/google", // your deployed backend
+//     //   "safemailai://",
+//     //   Linking.createURL("/Inbox") // your explicit deep link scheme
+//     // );
+//         console.log("OAuth result:", result);
+//       }
 
-      setLoading(false);
-    } catch (err) {
-      console.error("Login failed:", err);
-      setLoading(false);
+//       setLoading(false);
+//     } catch (err) {
+//       console.error("Login failed:", err);
+//       setLoading(false);
+//     }
+//   };
+      const handleOAuthLogin = async (provider) => {
+  try {
+    setLoading(true);
+
+    if (provider === "gmail") {
+      const authUrl = "https://safemail-ai-mobile.onrender.com/auth/google?platform=mobile";
+
+      const redirectUrl = Linking.createURL("/InboxScreen");
+
+      const result = await WebBrowser.openAuthSessionAsync(authUrl, redirectUrl);
+
+      console.log("OAuth result:", result);
     }
-  };
 
+    setLoading(false);
+  } catch (err) {
+    console.error("Login failed:", err);
+    setLoading(false);
+  }
+};
   return (
     <>
     <ScrollView style={{ flex: 1, backgroundColor: "#0f172a" }} contentContainerStyle={{ flexGrow: 1 }}>

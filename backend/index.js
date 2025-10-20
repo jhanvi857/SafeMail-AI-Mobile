@@ -108,12 +108,16 @@ router.use(
   session({
     secret: "safemail_secret_key",
     resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: "none",
+      secure: true,
+    },
   })
 );
 
-// ----- Passport init -----
+
 router.use(passport.initialize());
 router.use(passport.session());
 
@@ -142,20 +146,49 @@ router.get(
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
 
+// router.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", { failureRedirect: "/" }),
+//   (req, res) => {
+//     const email = req.user.emails[0].value;
+//     const platform = req.session.platform || "web";
+
+//     let redirectUrl;
+//     if (platform === "mobile") {
+//       redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemailai?safemailDeepLink=safemailai://InboxScreen?email=${encodeURIComponent(email)}`;
+//     } else {
+//       redirectUrl = `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`;
+//     }
+
+//     res.redirect(redirectUrl);
+//   }
+// );
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/" }),
   (req, res) => {
     const email = req.user.emails[0].value;
-    const platform = req.session.platform || "web";
+
+    // Check stored platform flag from session (if lost, assume mobile if no Origin)
+    const platform =
+      req.session?.platform ||
+      (req.headers.origin && req.headers.origin.includes("localhost")
+        ? "web"
+        : "mobile");
 
     let redirectUrl;
+
     if (platform === "mobile") {
-      redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemailai?safemailDeepLink=safemailai://InboxScreen?email=${encodeURIComponent(email)}`;
+      // ✅ Correct Expo redirect for mobile deep link
+      redirectUrl = `https://auth.expo.io/@jhanvi_patel/safemailai?safemailDeepLink=safemailai://InboxScreen?email=${encodeURIComponent(
+        email
+      )}`;
     } else {
+      // ✅ Web redirect for local dev or hosted web app
       redirectUrl = `http://localhost:8081/InboxScreen?email=${encodeURIComponent(email)}`;
     }
 
+    console.log("Redirecting user to:", redirectUrl);
     res.redirect(redirectUrl);
   }
 );
