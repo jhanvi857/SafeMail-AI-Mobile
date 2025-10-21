@@ -2,8 +2,7 @@ import { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, FlatList } from "react-native";
 import { Download, FileText } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useEmails } from "@/hooks/useEmails";
-
+import {useEmails} from "../hooks/useEmails"
 export default function ReportsScreen() {
   const insets = useSafeAreaInsets();
   const emails = useEmails(); 
