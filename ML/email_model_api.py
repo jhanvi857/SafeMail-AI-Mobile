@@ -31,7 +31,7 @@ def predict():
         prob = model.predict_proba(X)[0][1]
         prediction = model.predict(X)[0]
 
-        threshold = 0.5
+        threshold = 0.6
         if prob > threshold:
             label = "fraudulent"
         else:

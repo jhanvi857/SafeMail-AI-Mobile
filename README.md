@@ -42,7 +42,7 @@ cd SafeMail-AI
 ```
 ### 2. Start the ML Service
 ```bash
-cd ml-service
+cd ML
 pip install -r requirements.txt
 python app.py
 ```
