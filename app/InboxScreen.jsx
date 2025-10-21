@@ -202,7 +202,7 @@ import { X } from "lucide-react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import * as Linking from "expo-linking";
-import { useEmails } from "@/hooks/useEmails";
+import { useEmails } from "../hooks/useEmails";
 
 export default function InboxScreen() {
   const router = useRouter();
