@@ -226,7 +226,7 @@ export default function InboxScreen() {
     const refreshToken = queryParams.refreshToken; 
     if (accessToken && refreshToken) {
       try {
-        await fetch("http://localhost:3000/predict-emails/set-tokens", {
+        await fetch("https://safemail-ai-mobile.onrender.com/predict-emails/set-tokens", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ tokens: { accessToken, refreshToken } }),
@@ -253,7 +253,7 @@ export default function InboxScreen() {
     if (!emailText.trim()) return alert("Please enter email text");
 
     try {
-      const response = await fetch("http://localhost:3000/api/analyze-email", {
+      const response = await fetch("https://safemail-ai-mobile.onrender.com/api/analyze-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ emailText }),

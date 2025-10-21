@@ -37,7 +37,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: `${BACKEND_BASE}/auth/google/callback`,
+      callbackURL: `${process.env.BASE_URL}/auth/google/callback`,
     },
     (accessToken, refreshToken, profile, done) => {
       profile.tokens = { accessToken, refreshToken };
@@ -76,9 +76,9 @@ router.get(
 
     let redirectUrl;
     if (platform === "mobile") {
-      redirectUrl = `${MOBILE_DEEP_LINK}?email=${encodeURIComponent(email)}`;
+      redirectUrl = `https://safe-mail-ai-mobile.vercel.app/InboxScreen?email=${encodeURIComponent(email)}`;
     } else {
-      redirectUrl = `${LOCALHOST_WEB}/InboxScreen?email=${encodeURIComponent(email)}`;
+      redirectUrl = `https://safe-mail-ai-mobile.vercel.app/InboxScreen?email=${encodeURIComponent(email)}`;
     }
 
     console.log("Redirecting user to:", redirectUrl);

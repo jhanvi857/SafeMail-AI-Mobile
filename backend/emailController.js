@@ -51,7 +51,7 @@ const fetchEmailsAndPredict = async (req) => {
 
     const emailText = getBody(payload) || msg.data.snippet || "";
 
-    const mlResp = await fetch("http://localhost:5000/predict", {
+    const mlResp = await fetch("https://safemail-ai-mobile-ml.onrender.com/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: emailText }),
